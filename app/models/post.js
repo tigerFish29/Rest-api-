@@ -13,4 +13,4 @@ const PersonSchema = mongoose.Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model("Post", PersonSchema);
+module.exports = mongoose.model("Person", PersonSchema);
