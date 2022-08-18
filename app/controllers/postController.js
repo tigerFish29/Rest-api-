@@ -2,6 +2,7 @@
  *  Controller for the person 
  */
 
+const e = require("express");
 const person = require("../models/post");
 
 // create and save a person 
@@ -56,5 +57,44 @@ exports.findOne = (req, res) => {
 
 // update a person 
 exports.update = (req, res) => {
-    if 
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Data to update cannot be empty"
+        });
+    }
+
+    const id = req.params.id;
+    person.findByIdAndUpdate(id, req.body, {useFindAndModify: false})
+    .then(data => {
+        if (!data) {
+            res.status(400).send({
+                message: `Cannot update person with id =   ${id}`
+            }) 
+        } else res.send({message: "person was updated successfully"})
+    })
+    .catch(err => {
+        res.status(500).send({
+            message: `Error updatting person`
+        })
+    })
+}
+
+// delete 
+exports.delete = (req, res) => {
+    const id = req.params.id;
+    person.findByIdAndRemove(id)
+    .then(data => {
+        if (!data) {
+            res.status(404).send({
+                message: `Cannot delete person with id = ${id}`
+            })
+        } else{
+            res.send({ message: `Person was successfully deleted!`})
+        }
+    })
+    .catch(err => {
+        res.status(500).send({
+            message: `Could not delete!`
+        })
+    })
 }
